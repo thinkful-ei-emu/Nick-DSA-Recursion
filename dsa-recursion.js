@@ -96,42 +96,38 @@ const factorial = function(num){
 };
 
 //8
-const mazeEscapeRoute = function(maze, currentRowIndex = 0, currentIndex = 0, route = [], lastDirection = '', numOfMovements = 0){
-  if (currentIndex >= maze[0].length || currentRowIndex >= maze.length || currentIndex < 0 || currentRowIndex < 0){
-    console.log('invalid position');
+const mazeEscapeRoute = function(maze, currentRowIndex = 0, currentColIndex = 0, route = [], lastDirection = '', numOfMovements = 0){
+  if (currentColIndex >= maze[0].length || currentRowIndex >= maze.length){
     return;
   }
-  console.log(lastDirection);
-  console.log(route.toString());
+  
+  if (currentColIndex < 0 || currentRowIndex < 0){
+    return;
+  }
   route[numOfMovements] = lastDirection;
   numOfMovements++;
 
-  if (maze[currentRowIndex][currentIndex] === 'e'){
+  if (maze[currentRowIndex][currentColIndex] === 'e'){
+    console.log('found the exit:');
     console.log(route.filter(step => step !== ''));
-    console.log('found the exit');
     return ;
   }
-  console.log(currentIndex, currentRowIndex);
 
-  if (maze[currentRowIndex][currentIndex] === ' '){
-    mazeEscapeRoute(maze, currentRowIndex, currentIndex + 1, route, 'R', numOfMovements);
-    mazeEscapeRoute(maze, currentRowIndex + 1, currentIndex, route, 'D', numOfMovements);
+
+  if (maze[currentRowIndex][currentColIndex] === ' '){
+    maze[currentRowIndex][currentColIndex] = 'v';
+    mazeEscapeRoute(maze, currentRowIndex, currentColIndex - 1, route, 'L', numOfMovements);
+
+    mazeEscapeRoute(maze, currentRowIndex - 1, currentColIndex, route, 'U', numOfMovements);
+
+    mazeEscapeRoute(maze, currentRowIndex, currentColIndex + 1, route, 'R', numOfMovements);
+
+    mazeEscapeRoute(maze, currentRowIndex + 1, currentColIndex, route, 'D', numOfMovements);
+
+    maze[currentRowIndex][currentColIndex] = ' ';
   }
 
-  // if (maze[currentIndex][currentIndex] === '*' && route[route.length - 1] === 'R'){
-  //   numOfMovements --;
-  //   mazeEscapeRoute(maze, currentRowIndex, currentIndex - 1, route, 'L', numOfMovements);
-  // }
-
-  // if (maze[currentIndex][currentIndex] === '*' && route[route.length - 1] === 'D'){
-  //   numOfMovements --;
-  //   mazeEscapeRoute(maze, currentRowIndex - 1, currentIndex, route, 'U', numOfMovements);
-  // }
-
-  if (maze[currentRowIndex][currentIndex] === '*'){
-    numOfMovements --;
-    return;
-  }
+  numOfMovements--;
 
 };
 
@@ -144,7 +140,10 @@ let mazeOne = [
   [' ', ' ', ' ', ' ', ' ', ' ', 'e']
 ];
 
-console.log(mazeEscapeRoute(mazeOne));
+// mazeEscapeRoute(mazeOne);
+
+
+
 
 
 
